@@ -18,12 +18,12 @@ def retain_dataset_columns(
 
 
 def load_nq_dpr_corpus() -> datasets.Dataset:
-    return datasets.load_dataset("jxm/nq_corpus_dpr")
+    return datasets.load_dataset("jxm/nq_corpus_dpr", trust_remote_code=True)
 
 
 def load_msmarco_corpus() -> datasets.Dataset:
     # has columns ["title", "text"]. only one split ("train")
-    dataset_dict = datasets.load_dataset("Tevatron/msmarco-passage-corpus")
+    dataset_dict = datasets.load_dataset("Tevatron/msmarco-passage-corpus", trust_remote_code=True)
     return dataset_dict["train"]
 
 
@@ -51,7 +51,7 @@ def get_world_size() -> int:
 def load_one_million_paired_instructions() -> datasets.Dataset:
     # has only "train" split, and "system" (system prompt)
     # and "user" (user input) columns
-    dataset_dict = datasets.load_dataset("wentingzhao/one-million-paired-instructions")
+    dataset_dict = datasets.load_dataset("wentingzhao/one-million-paired-instructions", trust_remote_code=True)
     dataset_dict = dataset_map_multi_worker(
         dataset_dict,
         map_fn=create_ompi_ex,
@@ -64,20 +64,20 @@ def load_one_million_paired_instructions() -> datasets.Dataset:
 def load_one_million_instructions() -> datasets.Dataset:
     # has only "train" split, and "system" (system prompt)
     # and "user" (user input) columns
-    dataset_dict = datasets.load_dataset("wentingzhao/one-million-instructions")
+    dataset_dict = datasets.load_dataset("wentingzhao/one-million-instructions", trust_remote_code=True)
     dataset_dict = dataset_map_multi_worker(dataset_dict, create_ompi_ex)
 
     return dataset_dict["train"]
 
 
 def load_anthropic_toxic_prompts() -> datasets.Dataset:
-    d = datasets.load_dataset("wentingzhao/anthropic-hh-first-prompt")["train"]
+    d = datasets.load_dataset("wentingzhao/anthropic-hh-first-prompt", trust_remote_code=True)["train"]
     d = d.rename_column("user", "text")
     return d
 
 
 def load_luar_reddit() -> datasets.Dataset:
-    d = datasets.load_dataset("friendshipkim/reddit_eval_embeddings_luar")
+    d = datasets.load_dataset("friendshipkim/reddit_eval_embeddings_luar", trust_remote_code=True)
     d = d.rename_column("full_text", "text")
     d = d.rename_column("embedding", "frozen_embeddings")
     return d
@@ -118,29 +118,29 @@ def dataset_from_args(data_args: DataArguments) -> datasets.DatasetDict:
 
 
 def load_ag_news_test() -> datasets.Dataset:
-    return datasets.load_dataset("ag_news")["test"]
+    return datasets.load_dataset("ag_news", trust_remote_code=True)["test"]
 
 
 def load_xsum_val(col: str) -> datasets.Dataset:
-    d = datasets.load_dataset("xsum")["validation"]
+    d = datasets.load_dataset("xsum", trust_remote_code=True)["validation"]
     d = d.rename_column(col, "text")
     return d
 
 
 def load_wikibio_val() -> datasets.Dataset:
-    d = datasets.load_dataset("wiki_bio")["val"]
+    d = datasets.load_dataset("wiki_bio", trust_remote_code=True)["val"]
     d = d.rename_column("target_text", "text")
     return d
 
 
 def load_arxiv_val() -> datasets.Dataset:
-    d = datasets.load_dataset("ccdv/arxiv-summarization")["validation"]
+    d = datasets.load_dataset("ccdv/arxiv-summarization", trust_remote_code=True)["validation"]
     d = d.rename_column("abstract", "text")
     return d
 
 
 def load_python_code_instructions_18k_alpaca() -> datasets.Dataset:
-    d = datasets.load_dataset("iamtarun/python_code_instructions_18k_alpaca")["train"]
+    d = datasets.load_dataset("iamtarun/python_code_instructions_18k_alpaca", trust_remote_code=True)["train"]
     d = d.rename_column("instruction", "text")
     return d
 
