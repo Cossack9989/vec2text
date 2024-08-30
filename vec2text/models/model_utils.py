@@ -29,7 +29,8 @@ EMBEDDER_MODEL_NAMES = [
     "gpt2-medium",
     "gpt2-large",
     "gpt2-xl",
-    "gte-Qwen2",
+    "gte-Qwen2-1.5B",
+    "gte-Qwen2-7B"
 ]
 
 
@@ -238,9 +239,14 @@ def load_embedder_and_tokenizer(name: str, torch_dtype: str, **kwargs):
             "nomic-ai/nomic-embed-text-v1", trust_remote_code=True
         )
         tokenizer = model.tokenizer
-    elif name == "gte-Qwen2":
+    elif name == "gte-Qwen2-7B":
         model = SentenceTransformer(
             "Alibaba-NLP/gte-Qwen2-7B-Instruct", trust_remote_code=True
+        )
+        tokenizer = model.tokenizer
+    elif name == "gte-Qwen2-1.5B":
+        model = SentenceTransformer(
+            "Alibaba-NLP/gte-Qwen2-1.5B-Instruct", trust_remote_code=True
         )
         tokenizer = model.tokenizer
     else:
