@@ -28,7 +28,7 @@ EMBEDDER_MODEL_NAMES = [
     "gpt2",
     "gpt2-medium",
     "gpt2-large",
-    "gpt2-xl"
+    "gpt2-xl",
     "gte-Qwen2",
 ]
 
