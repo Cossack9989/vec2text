@@ -237,6 +237,11 @@ def load_embedder_and_tokenizer(name: str, torch_dtype: str, **kwargs):
             "nomic-ai/nomic-embed-text-v1", trust_remote_code=True
         )
         tokenizer = model.tokenizer
+    elif name == "gte-Qwen2":
+        model = SentenceTransformer(
+            "Alibaba-NLP/gte-Qwen2-7B-Instruct", trust_remote_code=True
+        )
+        tokenizer = model.tokenizer
     else:
         print(f"WARNING: Trying to initialize from unknown embedder {name}")
         model = transformers.AutoModel.from_pretrained(name, **model_kwargs)
