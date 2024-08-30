@@ -1,4 +1,4 @@
-from typing import Callable, Dict
+from typing import Callable, Dict, Literal
 
 import torch
 import transformers
@@ -119,7 +119,7 @@ def tokenize_function_llama_chat(
     return tokenize_function_inner
 
 
-def embed_dataset_batch(model: InversionModel, batch: Dict) -> Dict:
+def embed_dataset_batch(model: InversionModel, batch: Dict, device: Literal["cuda", "mps", "cpu"]) -> Dict:
     assert "input_ids" in batch.keys(), f"invalid keys {batch.keys()}"
     assert hasattr(model, "call_embedding_model")
 

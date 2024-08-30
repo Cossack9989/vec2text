@@ -264,6 +264,10 @@ def load_encoder_decoder(
     model_kwargs: Dict[str, Any] = {
         "low_cpu_mem_usage": True,
     }
+    if get_device() == "cuda":
+        model_kwargs.update({
+            "device_map": "auto",
+        })
     if lora:
         model_kwargs.update(
             {

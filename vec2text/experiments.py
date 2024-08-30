@@ -419,8 +419,11 @@ class Experiment(abc.ABC):
                 f"[Precomputing embeddings with batch size: {self.training_args.per_device_train_batch_size}]"
             )
             assert torch.cuda.is_available()
-            model = model.to(device)
-
+            # model = model.to(device)
+            if device == "cuda":
+                num_proc = 1
+            else:
+                num_proc = get_num_proc()
             new_tokenized_datasets = {}
             for key, d in tokenized_datasets.items():
                 new_fingerprint = (
@@ -429,11 +432,11 @@ class Experiment(abc.ABC):
                 print("\tsaving precomputed embeddings to file:", new_fingerprint)
                 new_tokenized_datasets[key] = dataset_map_multi_worker(
                     dataset=d,
-                    map_fn=functools.partial(embed_dataset_batch, model),
+                    map_fn=functools.partial(embed_dataset_batch, model, device),
                     batched=True,
                     batch_size=self.training_args.per_device_train_batch_size,
                     new_fingerprint=new_fingerprint,
-                    num_proc=get_num_proc(),
+                    num_proc=num_proc,
                 )
             tokenized_datasets = datasets.DatasetDict(new_tokenized_datasets)
         ###########################################################################
@@ -492,19 +495,22 @@ class Experiment(abc.ABC):
 
         if self.model_args.use_frozen_embeddings_as_input:
             assert torch.cuda.is_available()
-            model = model.to(device)
-
+            # model = model.to(device)
+            if device == "cuda":
+                num_proc = 1
+            else:
+                num_proc = get_num_proc()
             new_tokenized_datasets = {}
             for key, d in val_datasets_dict.items():
                 new_tokenized_datasets[key] = dataset_map_multi_worker(
                     dataset=d,
-                    map_fn=functools.partial(embed_dataset_batch, model),
+                    map_fn=functools.partial(embed_dataset_batch, model, device),
                     batched=True,
                     batch_size=self.training_args.per_device_train_batch_size,
                     new_fingerprint=(
                         d._fingerprint + md5_hash_kwargs(**self.dataset_kwargs) + ""
                     ),
-                    num_proc=get_num_proc(),
+                    num_proc=num_proc,
                 )
             val_datasets_dict = datasets.DatasetDict(new_tokenized_datasets)
         return val_datasets_dict

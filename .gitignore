@@ -20,3 +20,5 @@ slurm-scripts/
 wandb/
 
 .idea
+
+.DS_Store
